@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 @layer base {
   body {
@@ -16,14 +14,14 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: theme('colors.background'); 
+  background: theme('colors.background');
 }
 
 ::-webkit-scrollbar-thumb {
-  background: theme('colors.surface'); 
+  background: theme('colors.surface');
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: theme('colors.highlight'); 
+  background: theme('colors.highlight');
 }
