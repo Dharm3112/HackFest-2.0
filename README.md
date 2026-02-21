@@ -265,9 +265,42 @@ This project is licensed under the MIT License - see the `LICENSE` file for deta
 
 ---
 
-## 🗺️ Future Improvements / Roadmap
+## 🗺️ Strategic Technical Roadmap: The Future of OmniGuard AML
 
-- [ ] **Multi-Format Ingestion Strategy:** Implement native `PyPDF2` integration to accept heavy, scanned regulatory documents with OCR.
-- [ ] **Data Pipeline (S3):** Migrate the local Parquet file to remote S3 block storage and execute DuckDB `S3 API` scans over the wire.
-- [ ] **Generative Explainability:** Right now the AI justifies via exact text matching. In the future, the Gemini model can read the isolated DuckDB row and generate a specialized natural language paragraph for the compliance officer per transaction.
-- [ ] **Graph Neural Networks:** Map the sender/receiver relationships identified in Parquet into a visual Knowledge Graph.
+As we scale OmniGuard AML from a high-performance prototype into an enterprise-grade compliance platform, our engineering initiatives are focused on expanding ingestion capabilities, scaling data infrastructure, and deepening our AI-driven risk intelligence.
+
+### 1. Omni-Channel Document Intelligence (OCR & Multi-Format Ingestion)
+* **Objective:** Eliminate manual data entry and preprocess bottlenecks by enabling the system to ingest any regulatory format, including legacy physical documents.
+* **Technical Approach:** Integrate native Optical Character Recognition (OCR) engines (e.g., Tesseract, AWS Textract) alongside `PyPDF2` to accurately parse heavy, scanned PDFs, faxes, and image-based regulatory updates before routing them to the Gemini extraction agent.
+* **Business Impact:** Drastically reduces the time-to-compliance for financial institutions dealing with legacy jurisdictions or paper-based mandates, ensuring zero regulatory lag.
+* **Implementation Complexity:** **Medium.** Requires robust preprocessing pipelines and error-handling for low-quality scans, but leverages mature, off-the-shelf OCR libraries.
+
+### 2. Cloud-Native Data Virtualization (S3 Pipeline & Compute Separation)
+* **Objective:** Achieve infinite horizontal scalability by decoupling the DuckDB compute engine from local storage restrictions.
+* **Technical Approach:** Migrate the local Apache Parquet datasets to remote, cost-effective S3 block storage. Utilize the DuckDB `httpfs` extension to execute high-speed, vectorized API scans directly over the wire, querying only the necessary columnar data without downloading entire files.
+* **Business Impact:** Enables the platform to seamlessly query petabytes of transactional data across global bank divisions simultaneously, driving infrastructure costs down while maintaining millisecond query latency.
+* **Implementation Complexity:** **Low.** DuckDB is natively designed for cloud-storage integration; the primary effort lies in securely managing IAM roles and network optimizing the S3 buckets.
+
+### 3. Generative Case Narratives (Advanced Explainability)
+* **Objective:** Transform binary rule-flagging into comprehensive, audit-ready compliance reports.
+* **Technical Approach:** Evolve the current exact-text matching system into a secondary generative workflow. When DuckDB flags a violation, the isolated database row and the triggered rule will be fed back into the Gemini model. The LLM will then synthesize a specialized, natural-language narrative tailored specifically for the investigating compliance officer.
+* **Business Impact:** Slashes the time human investigators spend writing Suspicious Activity Reports (SARs), serving as a true AI co-pilot that drafts the initial investigation summary for human review.
+* **Implementation Complexity:** **Medium.** Requires careful prompt engineering and strict JSON schema enforcement to ensure the generated narratives remain factual and do not hallucinate outside the bounds of the specific transaction data.
+
+### 4. Enterprise Knowledge Graphs (Entity Resolution & Network Mapping)
+* **Objective:** Uncover hidden fraud syndicates and complex money-laundering rings that evade single-transaction rules (e.g., sophisticated layering or smurfing).
+* **Technical Approach:** Deploy Graph Neural Networks (GNNs) and visual graph databases (like Neo4j) to map the sender and receiver metadata extracted from the Parquet files. This creates a dynamically updating, multi-dimensional web of financial relationships.
+* **Business Impact:** Shifts the platform from reactive rule-checking to proactive threat hunting. Investigators can visually trace illicit fund flows across shell companies and mule accounts in real-time.
+* **Implementation Complexity:** **High.** Architecting highly performant graph databases at a massive transactional scale requires specialized engineering and complex real-time algorithmic processing.
+
+### 5. Continuous Active Learning (Automated Model Feedback)
+* **Objective:** Create a self-improving threat detection lifecycle based on human investigator feedback.
+* **Technical Approach:** Instrument the "Human-in-the-Loop" dashboard to securely capture when an officer marks a flag as a "False Alarm" or "Escalated." This telemetry data will be piped into a continuous fine-tuning pipeline, slightly adjusting the rule-extraction weights and generative thresholds of the underlying LLM over time.
+* **Business Impact:** The platform becomes smarter the more the enterprise uses it, drastically reducing false-positive rates, combating model drift, and widening the competitive moat against static legacy vendors.
+* **Implementation Complexity:** **High.** Requires establishing secure, automated MLOps pipelines and rigorous guardrails to prevent the model from "unlearning" critical baseline regulations.
+
+### 6. Cross-Border Federation (Multi-Jurisdictional Engine)
+* **Objective:** Allow global banks to apply different, conflicting AML rulesets to transactions depending on their geographic routing.
+* **Technical Approach:** Implement a geolocation tagging and policy-routing layer within the DuckDB SQL translation phase. The system will ingest policies from FINRA (US), FCA (UK), and MAS (Singapore) simultaneously, assigning rules to specific transactional sub-queries based on sender/receiver ISO country codes.
+* **Business Impact:** Positions OmniGuard as a unified, global compliance brain, allowing multinational banks to consolidate their disjointed regional risk software into a single pane of glass.
+* **Implementation Complexity:** **Medium.** The query orchestration logic will require careful optimization to prevent latency spikes while joining multiple jurisdictional rulesets against the primary Parquet table.
