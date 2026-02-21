@@ -1,78 +1,272 @@
-# OmniGuard AML: Data Policy Agent Engine
+# 🛡️ OmniGuard AML (Data Policy Agent Engine)
 
-OmniGuard AML is an intelligent, high-performance Data Policy Agent built for the IBM Hackathon. It reads natural-language Anti-Money Laundering (AML) policies using Google's Gemini 2.5 Flash, extracts programmable business rules, and executes them against massive Apache Parquet datasets via DuckDB to identify illicit transactions in milliseconds.
+> **OmniGuard AML** is an intelligent, high-performance Data Policy Agent built to combat money laundering at scale. It reads natural-language Anti-Money Laundering (AML) policies using Google's Gemini 2.5 Flash, extracts programmable business rules, and executes them against massive, optimized Apache Parquet datasets via DuckDB to identify illicit transactions in milliseconds.
 
-## 🚀 Features
+---
 
-*   **Intelligence Ingestion:** Drag-and-drop a policy document (PDF/TXT) and the agent extracts the executable rules automatically via Gemini 2.5 Flash.
-*   **Massive Scale Batch Scanning:** Utilizes the DuckDB vectorized engine directly on optimized Parquet format to scan millions of rows in sub-seconds.
-*   **HexaCore Dashboard:** An immersive, dark-mode React UI (`framer-motion`, `lucide-react`) equipped with virtualization (`@tanstack/react-virtual`) to render 10,000+ AML violations flawlessly at 60 FPS.
-*   **Explainability:** Human-in-the-Loop approval workflows side-by-side with exact document citations for the flagged DB conditions.
+## 📑 Table of Contents
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Folder Structure](#-folder-structure)
+- [Installation Instructions](#-installation-instructions)
+- [Environment Variables](#-environment-variables)
+- [Usage Instructions](#-usage-instructions)
+- [API Endpoints](#-api-endpoints)
+- [Scripts & Commands](#-scripts--commands)
+- [Testing Instructions](#-testing-instructions)
+- [Deployment Guide](#-deployment-guide)
+- [Troubleshooting](#-troubleshooting)
+- [Future Improvements & Roadmap](#-future-improvements--roadmap)
+- [Contributing](#-contributing)
+- [License](#-license)
+
+---
+
+## ✨ Features
+
+- **🧠 Intelligence Ingestion:** Drag-and-drop a policy document (PDF/TXT/MD), and the AI agent instantly extracts executable regulatory rules via Gemini 2.5 Flash Structured Outputs.
+- **⚡ Massive Scale Batch Scanning:** Utilizes DuckDB's vectorized engine directly on optimized Parquet format, capable of scanning tens of millions of transaction rows in sub-seconds.
+- **🎨 HexaCore Dashboard:** An immersive, dark-mode React UI powered by Framer Motion, Lucide React icons, and custom HexaCore styling (`#0B0B0B`, `#0905FE`).
+- **🗃️ Virtualized Data Grid:** Uses `@tanstack/react-virtual` to render over 10,000+ AML violations flawlessly at 60 FPS without crashing the browser DOM.
+- **🔍 Deep Explainability:** Features an interactive modal that juxtaposes the offending raw database transaction against the exact PDF policy citation that triggered the flag.
+- **👤 Human-in-the-Loop:** Built-in workflows to acknowledge False Alarms or Freeze Accounts based on AI insights.
+
+---
 
 ## 🛠️ Tech Stack
 
-*   **Frontend:** React 19, Vite, Tailwind CSS v4, Framer Motion, Axios.
-*   **Backend:** FastAPI (Python), SQLite (Application State).
-*   **AI Engine:** Google GenAI SDK (Gemini 2.5 Flash) with Structured Output logic.
-*   **Data Engine:** Polars (CSV conversions), DuckDB (Parquet vector scanning).
+**Frontend (Client)**
+- React 19 + Vite
+- Tailwind CSS v4 (HexaCore Dark Mode Theme)
+- Framer Motion (Animations)
+- TanStack Table / Virtual (Virtualization)
+- Axios (HTTP Client)
+
+**Backend (Server)**
+- Python 3.10+
+- FastAPI (REST API Engine)
+- Uvicorn (ASGI Server)
+- SQLite (Application State & Violations)
+
+**AI & Data Infrastructure**
+- Google GenAI SDK (Gemini 2.5 Flash)
+- DuckDB (In-process analytical SQL engine)
+- Polars (Lightning-fast DataFrame operations for Parquet conversion)
+- Apache Parquet (Optimized columnar storage)
 
 ---
 
-## 💻 How to Run This Project Locally
+## 📂 Folder Structure
 
-This project requires running two concurrent terminal windows—one for the Python backend and one for the React frontend.
+```text
+HackFest-2.0/
+├── backend/                  # Python FastAPI Server & AI Agents
+│   ├── agents/               # Core Agent Logic
+│   │   ├── db_scanner.py     # DuckDB Parquet Scanner Engine
+│   │   └── pdf_reader_agent.py # Gemini 2.5 Flash Extraction Logic
+│   ├── api/                  # FastAPI Routes
+│   │   ├── rules.py          # Upload & Rule Endpoints
+│   │   └── scan.py           # Trigger & Violation Endpoints
+│   ├── data_engine/          # Script to convert CSV to Parquet
+│   │   └── convert_to_parquet.py
+│   ├── models/               # Pydantic Schemas for validation
+│   ├── database.py           # SQLite connection & initialization
+│   ├── main.py               # FastAPI application entry point
+│   ├── requirements.txt      # Python dependencies
+│   └── test_*.py             # Testing scripts
+├── data/                     # Application Data (Parquet, DB)
+│   ├── app_state.db          # SQLite state database
+│   ├── dummy_aml_policy.md   # Example Policy for ingestion
+│   └── optimized_trans.parquet # Generated optimized dataset
+├── frontend/                 # React UI Application
+│   ├── public/               # Static assets
+│   ├── src/                  # React Components & Services
+│   │   ├── components/       # UI Widgets (Dropzone, Terminal, ViolationsTable)
+│   │   ├── services/         # Axios API bridges
+│   │   ├── App.jsx           # Main Dashboard Layout
+│   │   ├── index.css         # Tailwind global styles
+│   │   └── main.jsx          # React entry point
+│   ├── package.json          # Node dependencies
+│   └── tailwind.config.js    # HexaCore Theme Config
+├── DataSet/                  # Raw Source CSV Files (Not checked into Git)
+│   └── HI-Small_Trans.csv    # Original IBM dataset
+└── README.md                 # Project documentation
+```
+
+---
+
+## 💻 Installation Instructions
+
+This project runs two concurrent local servers (FastAPI Backend and Vite Frontend). 
 
 ### Prerequisites
-*   [Python 3.10+](https://www.python.org/)
-*   [Node.js 18+](https://nodejs.org/)
-*   The raw IBM `DataSet/HI-Small_Trans.csv` (For Data Engine generation).
+- [Python 3.10+](https://www.python.org/)
+- [Node.js 18+](https://nodejs.org/)
 
-### Step 1: Prepare the Dataset & Virtual Environment
-The system is designed to read ultra-fast Parquet files. You need to download the CSV dataset and convert it using our engine.
+### 1. Data Processing Engine Setup
+We must first convert the massive, slow CSV dataset into the optimized Apache Parquet format.
+```bash
+# Clone the repository and navigate into it
+cd HackFest-2.0
 
-1. Open a terminal in the root directory: `cd HackFest-2.0`
-2. Create your Virtual Environment: `python -m venv venv`
-3. Activate the Environment:
-   * **Windows:** `.\venv\Scripts\activate`
-   * **Mac/Linux:** `source venv/bin/activate`
-4. Install dependencies: `pip install -r backend/requirements.txt`
-5. Ensure the IBM Hackathon CSV is located at `DataSet/HI-Small_Trans.csv` (relative to the root project).
-6. Convert the CSV to Parquet: `python backend/data_engine/convert_to_parquet.py`
-   * *(This will create `data/optimized_trans.parquet`)*
+# Create and activate a Python virtual environment
+python -m venv venv
 
-### Step 2: Configure the AI
-1. Copy the example configuration file: `cp backend/.env.example backend/.env`
-2. Insert your actual Gemini API Key inside `backend/.env`.
-   * *Note: The system has built-in fallback logic! If you leave the key blank, or internet goes out, it will still output dummy rules matching `data/dummy_aml_policy.md` so the hackathon demo won't break on stage.*
+# Windows Activation:
+.\venv\Scripts\activate
+# Mac/Linux Activation:
+# source venv/bin/activate
 
-### Step 3: Run the Backend Server
-Keep your Virtual Environment activated from Step 1.
-1. Run the FastAPI server via Uvicorn:
-   ```bash
-   uvicorn backend.main:app --host 127.0.0.1 --port 8001 --reload
-   ```
-2. The API is now actively listening on `http://127.0.0.1:8001`. Leave this terminal window running.
+# Install the necessary Data & Backend dependencies
+pip install -r backend/requirements.txt
 
-### Step 4: Run the HexaCore Frontend
-Open a **NEW** terminal window.
-1. Navigate to the frontend UI: `cd HackFest-2.0/frontend`
-2. Install npm dependencies: `npm install`
-3. Start the Vite React Server: 
-   ```bash
-   npm run dev -- --port 5173
-   ```
-4. Check your browser. The live dashboard is locally hosted at **`http://localhost:5173/`**.
+# Ensure the source CSV is located at 'DataSet/HI-Small_Trans.csv' (relative to root)
+# Run the Data Engine to generate the 96MB Parquet file
+python backend/data_engine/convert_to_parquet.py
+```
+
+### 2. Configure Environment Variables
+Copy the example environment file and insert your API credentials.
+```bash
+cp backend/.env.example backend/.env
+```
+Provide your Gemini API key (see Environment Variables section below).
+
+### 3. Start the Backend Server
+Keep the Python virtual environment active.
+```bash
+uvicorn backend.main:app --host 127.0.0.1 --port 8001 --reload
+```
+The backend API is now alive at `http://127.0.0.1:8001/`.
+
+### 4. Start the Frontend Application
+Open a **new separate terminal** window.
+```bash
+cd HackFest-2.0/frontend
+npm install
+npm run dev -- --port 5173
+```
+The React frontend is now accessible at `http://localhost:5173/`.
 
 ---
 
-## 🎬 How to Demo to Judges
+## 🔐 Environment Variables
 
-Once both servers are running:
-1. Show the Judges the `data/dummy_aml_policy.md` file so they can see it's clear English.
-2. Drag and drop that MD file into the **Deploy AML Policy** zone on the Web App.
-3. Show the UI extracting exactly 3 rules (e.g., "Massive Single Wire", "Micro-Structuring").
-4. Click **Initiate Batch Scan**. 
-5. Emphasize the live Secure Terminal simulation tracking the DuckDB compute cores.
-6. The app will catch precisely **69 violations**.
-7. Click any violation's *Justification* cell to open the **Explainability Modal**. Show the Judges how the Database logic aligns side-by-side with the pure PDF text quote.
-8. Click **Freeze Account** (Escalate) or **Acknowledge** (False Alarm) to prove it's a true Human AI interaction flow.
+Create exactly one `.env` file located at `backend/.env`.
+
+```env
+# Google Gemini API Key required for the Policy Ingestion Agent
+GEMINI_API_KEY="your-gemini-2.5-flash-api-key"
+
+# Port Configuration (Defaults to 8001 if omitted)
+PORT=8001
+```
+
+> **Note on Resiliency:** If the `GEMINI_API_KEY` is completely missing or the internet connection drops, the application has built-in offline fallback logic. It will automatically populate the database with mock rules corresponding to `data/dummy_aml_policy.md` to ensure presentation/demo continuity.
+
+---
+
+## 🚀 Usage Instructions
+
+1. **Access the Dashboard:** Open `http://localhost:5173/` in your browser.
+2. **Ingest Policy:** In the "Policy Ingestion Engine" section, drag and drop the `data/dummy_aml_policy.md` (or your own custom PDF/txt file).
+3. **Verify AI Extraction:** Wait for the `Gemini 2.5 Flash is Parsing...` animation to conclude. The UI will display the total number of Active Rules translated into SQL logic.
+4. **Trigger Scan:** Click the blue **"Initiate Batch Scan"** button in Engine section 2.
+5. **Monitor Terminal:** Watch the simulated CLI feed as DuckDB traverses millions of rows.
+6. **Review Violations:** Scroll the massive virtualized table, analyze the AI Justifications, and use the Human-in-the-Loop buttons to Acknowledge or Freeze accounts.
+
+---
+
+## 🔌 API Endpoints
+
+The backend is fully documented via OpenAPI (Swagger). When the backend is running, visit `http://127.0.0.1:8001/docs`.
+
+### Core Routes:
+- `POST /api/policy/upload`: Ingests a raw file (PDF/MD), triggers Gemini extraction, and saves executable SQL rules to SQLite.
+- `GET /api/rules`: Returns the active AML rules formatted by the AI Agent.
+- `POST /api/scan/trigger`: Instructs the DuckDB agent to scan the local `.parquet` file against the rules and lodge new violations.
+- `GET /api/violations`: Retrieves a joined view of pending violations and their policy sources.
+- `POST /api/violations/{id}/resolve?action=approved|escalated`: Upates the violation status via Human-in-the-Loop input.
+
+---
+
+## 📜 Scripts & Commands
+
+| Command | Working Directory | Description |
+|---|---|---|
+| `python backend/data_engine/convert_to_parquet.py` | Root | Compresses the raw CSV dataset into high-speed Parquet. |
+| `uvicorn backend.main:app --host 0.0.0.0 --port 8001 --reload` | Root | Boots the FastAPI Dev Server. |
+| `python backend/test_upload.py` | Root | Automates the API hit to test Python AI extraction. |
+| `python backend/test_scan.py` | Root | Automates the API hit to fire DuckDB and retrieve results. |
+| `npm run dev -- --port 5173` | `/frontend` | Boots the Vite/React UI Server. |
+
+---
+
+## 🧪 Testing Instructions
+
+You can programmatically verify the intelligence pipeline without using the browser UI.
+
+1. Boot the FastAPI background server on port 8001.
+2. Use the provided Python testing scripts in sequence:
+   ```bash
+   # Test the AI Agent and Database Insertion
+   python backend/test_upload.py
+   
+   # Test the DuckDB Engine and Violation Flagging
+   python backend/test_scan.py
+   ```
+3. If both scripts return `HTTP 200 SUCCESS` and output valid JSON blocks mapping to transaction IDs, your engine is stable.
+
+---
+
+## 🌍 Deployment Guide
+
+### Assuming a Docker / Cloud Sandbox Environment
+1. **Containerization (Future):** Create a multi-stage `Dockerfile`. The Backend (Python) and Frontend (dist assets served via Nginx) can be containerized separately.
+2. **Cloud Object Storage (S3 / GCS):** Currently, the app uses a local filesystem `data/optimized_trans.parquet` file. In Production, point the DuckDB `HTTPFS` extension to read the remote Parquet datasets.
+3. **Database Migration:** Replace local `SQLite` (`data/app_state.db`) with a managed PostgreSQL instance for horizontal scalability of the rule-state.
+
+---
+
+## 🤝 Contributing Guidelines
+
+1. Fork the repository.
+2. Create your Feature Branch (`git checkout -b feature/AmazingOptimization`).
+3. Adhere to HexaCore CSS Variables (`text-primary`, `bg-surface`) if changing the UI.
+4. Run `npm run lint` inside `/frontend` and ensure no console warnings exist.
+5. Commit your Changes (`git commit -m 'Add some AmazingOptimization'`).
+6. Push to the Branch (`git push origin feature/AmazingOptimization`).
+7. Open a Pull Request referencing the Hackathon Issue Number.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the `LICENSE` file for details. Built for the IBM Hackathon.
+
+---
+
+## ⚙️ Troubleshooting
+
+**"DuckDB Error: Invalid Input Error"** 
+- Ensure you have run Phase 1: `python backend/data_engine/convert_to_parquet.py`
+- Ensure `numpy` and `pandas` are installed in your `venv` for terminal output bridging.
+
+**"Tailwind CSS / PostCSS build failing on Vite start"**
+- We migrated to Tailwind v4. Ensure you run `npm install @tailwindcss/postcss --save-dev` if your local cache is stale. 
+- Do NOT use the old `@tailwind` directives; use `@import "tailwindcss";` in `index.css`.
+
+**"Gemini API 400 Errors or Rate Limits"**
+- The Free Tier rate limits can hit quickly. Wait 1 min. Alternatively, disable the API key inside `.env` temporarily; the graceful fallback will engage instantly to save your presentation flow.
+
+**"Port 8001 is already in use"**
+- Kill hanging Python instances (Windows: `Stop-Process -Name "python" -Force`, Mac/Linux: `pkill -f python`).
+
+---
+
+## 🗺️ Future Improvements / Roadmap
+
+- [ ] **Multi-Format Ingestion Strategy:** Implement native `PyPDF2` integration to accept heavy, scanned regulatory documents with OCR.
+- [ ] **Data Pipeline (S3):** Migrate the local Parquet file to remote S3 block storage and execute DuckDB `S3 API` scans over the wire.
+- [ ] **Generative Explainability:** Right now the AI justifies via exact text matching. In the future, the Gemini model can read the isolated DuckDB row and generate a specialized natural language paragraph for the compliance officer per transaction.
+- [ ] **Graph Neural Networks:** Map the sender/receiver relationships identified in Parquet into a visual Knowledge Graph.
