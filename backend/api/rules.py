@@ -3,6 +3,8 @@ from backend.models.schemas import ExtractedRulesResponse, RuleModel, RuleJSON
 from backend.agents.pdf_reader_agent import extract_rules_from_text
 from backend.database import get_db_connection
 import json
+import PyPDF2
+import io
 
 router = APIRouter()
 
@@ -14,9 +16,26 @@ async def upload_policy(file: UploadFile = File(...)):
     """
     try:
         content = await file.read()
-        policy_text = content.decode("utf-8", errors="ignore")
         policy_name = file.filename
+        print(f"Ingesting file: {policy_name}")
+        
+        # Determine file type and extract text accordingly
+        if policy_name.lower().endswith('.pdf'):
+            print("Detected PDF format. Initializing PyPDF2...")
+            pdf_reader = PyPDF2.PdfReader(io.BytesIO(content))
+            extracted_text = []
+            for page in pdf_reader.pages:
+                page_text = page.extract_text()
+                if page_text:
+                    extracted_text.append(page_text)
+            policy_text = "\n".join(extracted_text)
+            print(f"Successfully extracted {len(policy_text)} characters from PDF.")
+        else:
+            print("Detected standard text/csv format. Decoding UTF-8...")
+            policy_text = content.decode("utf-8", errors="ignore")
+            
     except Exception as e:
+        print(f"File Extraction Error: {e}")
         raise HTTPException(status_code=400, detail=f"File reading error: {e}")
     
     # 1. AI Rule Extraction
