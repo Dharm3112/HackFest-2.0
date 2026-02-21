@@ -14,10 +14,10 @@ async def upload_policy(file: UploadFile = File(...)):
     """
     try:
         content = await file.read()
-        policy_text = content.decode("utf-8")
+        policy_text = content.decode("utf-8", errors="ignore")
         policy_name = file.filename
     except Exception as e:
-        raise HTTPException(status_code=400, detail="Could not read file. Ensure it is text decodable.")
+        raise HTTPException(status_code=400, detail=f"File reading error: {e}")
     
     # 1. AI Rule Extraction
     extracted = extract_rules_from_text(policy_text, policy_name)

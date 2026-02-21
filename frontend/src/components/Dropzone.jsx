@@ -50,7 +50,7 @@ const Dropzone = ({ onUploadSuccess }) => {
             >
                 <input
                     type="file"
-                    accept=".md,.txt,.pdf"
+                    accept="*"
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                     onChange={handleChange}
                     disabled={isUploading}
@@ -67,9 +67,9 @@ const Dropzone = ({ onUploadSuccess }) => {
                         <div className="w-20 h-20 bg-background rounded-full flex items-center justify-center mb-6 shadow-glow/20 shadow-lg border border-highlight/20">
                             <UploadCloud className="w-10 h-10 text-primary" />
                         </div>
-                        <h3 className="text-2xl font-bold text-white mb-2">Deploy AML Policy</h3>
+                        <h3 className="text-2xl font-bold text-white mb-2">Deploy AML Policy or Dataset</h3>
                         <p className="text-textMuted text-center max-w-md">
-                            Drag and drop your regulatory PDF or text file here. The OmniGuard AI Agent will automatically extract the programmable business rules.
+                            Drag and drop any configuration, text, code, or dataset file here. The OmniGuard AI Agent will automatically parse it and attempt to extract business rules.
                         </p>
                     </div>
                 )}

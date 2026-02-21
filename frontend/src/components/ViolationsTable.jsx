@@ -55,13 +55,17 @@ const ViolationsTable = ({ data, setViolations }) => {
             cell: info => {
                 const ruleInfo = JSON.parse(info.getValue());
                 return (
-                    <div className="flex flex-col">
-                        <span className="text-white font-semibold text-sm">{ruleInfo.description}</span>
-                        <span className="text-highlight text-xs font-mono truncate max-w-[200px]">{ruleInfo.logic}</span>
+                    <div className="flex flex-col max-w-[280px]">
+                        <span className="text-white font-semibold text-sm truncate" title={ruleInfo.description}>
+                            {ruleInfo.description}
+                        </span>
+                        <span className="text-highlight text-xs font-mono truncate" title={ruleInfo.logic}>
+                            {ruleInfo.logic}
+                        </span>
                     </div>
                 )
             },
-            size: 200,
+            size: 280,
         },
         {
             accessorKey: 'ai_justification',
