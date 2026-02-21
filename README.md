@@ -25,7 +25,7 @@
 
 ## ✨ Features
 
-- **🧠 Intelligence Ingestion:** Drag-and-drop a policy document (PDF/TXT/MD), and the AI agent instantly extracts executable regulatory rules via Gemini 2.5 Flash Structured Outputs.
+- **🧠 Intelligence Ingestion:** Drag-and-drop a policy document (PDF/TXT/MD), and the AI agent instantly extracts executable regulatory rules via Gemini 2.5 Flash Structured Outputs. Now natively handling binary PDFs via PyPDF2.
 - **⚡ Massive Scale Batch Scanning:** Utilizes DuckDB's vectorized engine directly on optimized Parquet format, capable of scanning tens of millions of transaction rows in sub-seconds.
 - **🎨 HexaCore Dashboard:** An immersive, dark-mode React UI powered by Framer Motion, Lucide React icons, and custom HexaCore styling (`#0B0B0B`, `#0905FE`).
 - **🗃️ Virtualized Data Grid:** Uses `@tanstack/react-virtual` to render over 10,000+ AML violations flawlessly at 60 FPS without crashing the browser DOM.
@@ -54,6 +54,7 @@
 - DuckDB (In-process analytical SQL engine)
 - Polars (Lightning-fast DataFrame operations for Parquet conversion)
 - Apache Parquet (Optimized columnar storage)
+- PyPDF2 (Native Binary PDF Extraction)
 
 ---
 
@@ -269,11 +270,11 @@ This project is licensed under the MIT License - see the `LICENSE` file for deta
 
 As we scale OmniGuard AML from a high-performance prototype into an enterprise-grade compliance platform, our engineering initiatives are focused on expanding ingestion capabilities, scaling data infrastructure, and deepening our AI-driven risk intelligence.
 
-### 1. Omni-Channel Document Intelligence (OCR & Multi-Format Ingestion)
-* **Objective:** Eliminate manual data entry and preprocess bottlenecks by enabling the system to ingest any regulatory format, including legacy physical documents.
-* **Technical Approach:** Integrate native Optical Character Recognition (OCR) engines (e.g., Tesseract, AWS Textract) alongside `PyPDF2` to accurately parse heavy, scanned PDFs, faxes, and image-based regulatory updates before routing them to the Gemini extraction agent.
-* **Business Impact:** Drastically reduces the time-to-compliance for financial institutions dealing with legacy jurisdictions or paper-based mandates, ensuring zero regulatory lag.
-* **Implementation Complexity:** **Medium.** Requires robust preprocessing pipelines and error-handling for low-quality scans, but leverages mature, off-the-shelf OCR libraries.
+### ✅ 1. Omni-Channel Document Intelligence (Native PDF Parsing) [SHIPPED]
+* **Objective:** Eliminate manual data entry and preprocess bottlenecks by enabling the system to natively ingest and understand heavy regulatory PDFs.
+* **Technical Approach:** Integrated native `PyPDF2` binary stream extraction to accurately parse digital PDFs before routing the text to the Gemini AI Agent. *(Note: Image-based OCR via Tesseract is still scheduled for Phase 2).*
+* **Business Impact:** Drastically reduces the time-to-compliance for financial institutions dealing with legacy PDF mandates, ensuring zero regulatory lag.
+* **Implementation Complexity:** **Shipped.** (Medium complexity achieved via robust FastAPI buffer-stream handling of binary file uploads).
 
 ### 2. Cloud-Native Data Virtualization (S3 Pipeline & Compute Separation)
 * **Objective:** Achieve infinite horizontal scalability by decoupling the DuckDB compute engine from local storage restrictions.
