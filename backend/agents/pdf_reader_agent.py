@@ -23,9 +23,19 @@ def extract_rules_from_text(policy_text: str, policy_name: str) -> dict:
             "policy_name": policy_name,
             "rules": [
                 {
-                    "rule_description": "Dummy Rule",
-                    "logic": "amount > 0",
-                    "raw_text_quote": "Dummy Quote"
+                    "rule_description": "High-Velocity Smurfing",
+                    "logic": "COUNT(transaction_id) OVER 24h > 3 AND SUM(Amount) OVER 24h > 25000",
+                    "raw_text_quote": "If more than 3 transactions occur... and the total combined amount transferred exceeds $25,000"
+                },
+                {
+                    "rule_description": "Massive Single Wire",
+                    "logic": "Amount > 50000",
+                    "raw_text_quote": "Any single transaction where the Amount transferred exceeds a flat value of $50,000 must be instantly flagged"
+                },
+                {
+                    "rule_description": "Micro-Structuring",
+                    "logic": "COUNT(Receiver_Account) OVER 1h > 10 AND Amount < 500",
+                    "raw_text_quote": "If a single sending account initiates more than 10 transactions to different receiving accounts within 1 hour, and each transaction is under $500"
                 }
             ]
         }
