@@ -61,37 +61,82 @@
 
 ```text
 HackFest-2.0/
-├── backend/                  # Python FastAPI Server & AI Agents
-│   ├── agents/               # Core Agent Logic
-│   │   ├── db_scanner.py     # DuckDB Parquet Scanner Engine
-│   │   └── pdf_reader_agent.py # Gemini 2.5 Flash Extraction Logic
-│   ├── api/                  # FastAPI Routes
-│   │   ├── rules.py          # Upload & Rule Endpoints
-│   │   └── scan.py           # Trigger & Violation Endpoints
-│   ├── data_engine/          # Script to convert CSV to Parquet
+├── .gitignore
+├── DataSet
+│   ├── HI-Large_Patterns.txt
+│   ├── HI-Large_Trans.csv
+│   ├── HI-Large_accounts.csv
+│   ├── HI-Medium_Patterns.txt
+│   ├── HI-Medium_Trans.csv
+│   ├── HI-Medium_accounts.csv
+│   ├── HI-Small_Patterns.txt
+│   ├── HI-Small_Trans.csv
+│   ├── HI-Small_accounts.csv
+│   ├── LI-Large_Patterns.txt
+│   ├── LI-Large_Trans.csv
+│   ├── LI-Large_accounts.csv
+│   ├── LI-Medium_Patterns.txt
+│   ├── LI-Medium_Trans.csv
+│   ├── LI-Medium_accounts.csv
+│   ├── LI-Small_Patterns.txt
+│   ├── LI-Small_Trans.csv
+│   └── LI-Small_accounts.csv
+├── Design Doc.md
+├── LICENSE
+├── PRD.md
+├── Problem Statement.md
+├── README.md  # Project documentation
+├── TODO.md  # Execution plan & Roadmap
+├── Tech Stack.md
+├── backend
+│   ├── __init__.py
+│   ├── agents
+│   │   ├── __init__.py
+│   │   ├── db_scanner.py
+│   │   └── pdf_reader_agent.py
+│   ├── api
+│   │   ├── __init__.py
+│   │   ├── rules.py  # Upload & Rule Endpoints (PyPDF2)
+│   │   └── scan.py
+│   ├── data_engine
+│   │   ├── check_schema.py
 │   │   └── convert_to_parquet.py
-│   ├── models/               # Pydantic Schemas for validation
-│   ├── database.py           # SQLite connection & initialization
-│   ├── main.py               # FastAPI application entry point
-│   ├── requirements.txt      # Python dependencies
-│   └── test_*.py             # Testing scripts
-├── data/                     # Application Data (Parquet, DB)
-│   ├── app_state.db          # SQLite state database
-│   ├── dummy_aml_policy.md   # Example Policy for ingestion
-│   └── optimized_trans.parquet # Generated optimized dataset
-├── frontend/                 # React UI Application
-│   ├── public/               # Static assets
-│   ├── src/                  # React Components & Services
-│   │   ├── components/       # UI Widgets (Dropzone, Terminal, ViolationsTable)
-│   │   ├── services/         # Axios API bridges
-│   │   ├── App.jsx           # Main Dashboard Layout
-│   │   ├── index.css         # Tailwind global styles
-│   │   └── main.jsx          # React entry point
-│   ├── package.json          # Node dependencies
-│   └── tailwind.config.js    # HexaCore Theme Config
-├── DataSet/                  # Raw Source CSV Files (Not checked into Git)
-│   └── HI-Small_Trans.csv    # Original IBM dataset
-└── README.md                 # Project documentation
+│   ├── database.py
+│   ├── main.py  # FastAPI application entry point
+│   ├── models
+│   │   ├── __init__.py
+│   │   └── schemas.py
+│   ├── requirements.txt
+│   ├── test_scan.py
+│   └── test_upload.py
+├── data
+│   ├── dummy_aml_policy.md
+│   └── optimized_trans.parquet
+├── frontend
+│   ├── .gitignore
+│   ├── README.md
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── postcss.config.js
+│   ├── public
+│   │   └── vite.svg
+│   ├── src
+│   │   ├── App.css
+│   │   ├── App.jsx  # Main Dashboard Layout
+│   │   ├── assets
+│   │   │   └── react.svg
+│   │   ├── components
+│   │   │   ├── Dropzone.jsx
+│   │   │   ├── Terminal.jsx
+│   │   │   └── ViolationsTable.jsx
+│   │   ├── index.css
+│   │   ├── main.jsx
+│   │   └── services
+│   │       └── api.js
+│   ├── tailwind.config.js
+│   └── vite.config.js
 ```
 
 ---
