@@ -16,7 +16,6 @@
 - [Testing Instructions](#-testing-instructions)
 - [Deployment Guide](#-deployment-guide)
 - [Troubleshooting](#-troubleshooting)
-- [Future Improvements & Roadmap](#-future-improvements--roadmap)
 - [Contributing](#-contributing)
 - [License](#-license)
 
