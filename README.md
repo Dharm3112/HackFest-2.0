@@ -348,6 +348,6 @@ As we scale OmniGuard AML from a high-performance prototype into an enterprise-g
 
 ---
 
-👥 Team
+## 👥 Team
 
 Designed and built for HackFest 2.0 by Pair Programmers.
