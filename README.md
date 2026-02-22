@@ -61,7 +61,6 @@
 
 ```text
 HackFest-2.0/
-├── .gitignore
 ├── DataSet
 │   ├── HI-Large_Patterns.txt
 │   ├── HI-Large_Trans.csv
@@ -81,13 +80,6 @@ HackFest-2.0/
 │   ├── LI-Small_Patterns.txt
 │   ├── LI-Small_Trans.csv
 │   └── LI-Small_accounts.csv
-├── Design Doc.md
-├── LICENSE
-├── PRD.md
-├── Problem Statement.md
-├── README.md  # Project documentation
-├── TODO.md  # Execution plan & Roadmap
-├── Tech Stack.md
 ├── backend
 │   ├── __init__.py
 │   ├── agents
@@ -137,6 +129,9 @@ HackFest-2.0/
 │   │       └── api.js
 │   ├── tailwind.config.js
 │   └── vite.config.js
+├── .gitignore
+├── LICENSE
+└── README.md  # Project documentation
 ```
 
 ---
