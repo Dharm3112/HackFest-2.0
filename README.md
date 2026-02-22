@@ -346,6 +346,8 @@ As we scale OmniGuard AML from a high-performance prototype into an enterprise-g
 * **Implementation Complexity:** **Medium.** The query orchestration logic will require careful optimization to prevent latency spikes while joining multiple jurisdictional rulesets against the primary Parquet table.
 -->
 
+---
+
 👥 Team
 
 Designed and built for HackFest 2.0 by Pair Programmers.
