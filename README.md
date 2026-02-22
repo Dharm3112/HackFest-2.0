@@ -1,4 +1,3 @@
-
 # 🛡️ OmniGuard AML (Data Policy Agent Engine)
 
 > **OmniGuard AML** is an intelligent, high-performance Data Policy Agent built to combat money laundering at scale. It reads natural-language Anti-Money Laundering (AML) policies using Google's Gemini 2.5 Flash, extracts programmable business rules, and executes them against massive, optimized Apache Parquet datasets via DuckDB to identify illicit transactions in milliseconds.
@@ -263,7 +262,7 @@ This project is licensed under the MIT License - see the `LICENSE` file for deta
 
 **"Port 8001 is already in use"**
 - Kill hanging Python instances (Windows: `Stop-Process -Name "python" -Force`, Mac/Linux: `pkill -f python`).
-
+<!--
 ---
 
 ## 🗺️ Strategic Technical Roadmap: The Future of OmniGuard AML
@@ -305,3 +304,4 @@ As we scale OmniGuard AML from a high-performance prototype into an enterprise-g
 * **Technical Approach:** Implement a geolocation tagging and policy-routing layer within the DuckDB SQL translation phase. The system will ingest policies from FINRA (US), FCA (UK), and MAS (Singapore) simultaneously, assigning rules to specific transactional sub-queries based on sender/receiver ISO country codes.
 * **Business Impact:** Positions OmniGuard as a unified, global compliance brain, allowing multinational banks to consolidate their disjointed regional risk software into a single pane of glass.
 * **Implementation Complexity:** **Medium.** The query orchestration logic will require careful optimization to prevent latency spikes while joining multiple jurisdictional rulesets against the primary Parquet table.
+-->
