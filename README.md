@@ -303,9 +303,6 @@ As we scale OmniGuard AML from a high-performance prototype into an enterprise-g
 * **Objective:** Allow global banks to apply different, conflicting AML rulesets to transactions depending on their geographic routing.
 * **Technical Approach:** Implement a geolocation tagging and policy-routing layer within the DuckDB SQL translation phase. The system will ingest policies from FINRA (US), FCA (UK), and MAS (Singapore) simultaneously, assigning rules to specific transactional sub-queries based on sender/receiver ISO country codes.
 * **Business Impact:** Positions OmniGuard as a unified, global compliance brain, allowing multinational banks to consolidate their disjointed regional risk software into a single pane of glass.
-<<<<<<< Updated upstream
+
 * **Implementation Complexity:** **Medium.** The query orchestration logic will require careful optimization to prevent latency spikes while joining multiple jurisdictional rulesets against the primary Parquet table.
 -->
-=======
-* **Implementation Complexity:** **Medium.** The query orchestration logic will require careful optimization to prevent latency spikes while joining multiple jurisdictional rulesets against the primary Parquet table.
->>>>>>> Stashed changes
